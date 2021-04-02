@@ -1,0 +1,28 @@
+- name: Task for vim install
+  hosts: all
+  remote_user: root
+  vars:
+    package_names:
+      - vim
+  tasks:
+    - name: "Check if vim package is installed or not on Debian Linux family"
+      command: dpkg-query -l "{{ item }}"
+      loop: "{{ package_names }}"
+      register: debian_package_check
+      when: ansible_facts['os_family'] == "Debian"
+ 
+    - name: Install package if not present Debian
+      package:
+        name: "{{ item }}"
+        state: present
+#     - apt: name=vim state=present
+      loop: "{{ package_names }}"
+      when: debian_package_check is failed and ansible_facts['os_family'] == "Debian" and "'Frontend-2,Backend,Controller' in group_names"
+    
+    - name: Delete vim package if it is present in Frontend-1
+      package:
+        name: "{{ item }}"
+        state: absent
+#     - apt: name=vim state=absent
+      loop: "{{ package_names }}"
+      when: debian_package_check is succeeded and ansible_facts['os_family'] == "Debian" and "{{ inventory_hostname == 'Frontend-1' }}"

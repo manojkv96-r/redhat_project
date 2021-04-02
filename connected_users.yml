@@ -1,0 +1,15 @@
+- name: Log Collection for w -i -f
+  hosts: all
+  become_user: root
+  tasks:
+     - name: Transfer the script for log collection
+       copy: src=/var/tmp/yellodocs/scripts/date.sh dest=/var/tmp mode=0777
+
+     - name: Execute the script
+       command: sh /var/tmp/date.sh
+     - name: Copy all the files to remote host
+       run_once: yes
+       fetch: src=/var/tmp/connected_user* dest=/var/tmp flat=yes
+     - name: Copy the files into Controller node
+       copy: src=/var/tmp/connected_user* dest=/var/tmp
+       when: '"Controller" in group_hosts'
