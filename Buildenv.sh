@@ -75,13 +75,7 @@ call_ssh_check() {
    echo "Logging in into Container"
    docker exec -it $2 /bin/bash
    sleep 5
-   passwd
-   expect -exact ": "
-   send "root123\r"
-   expect -exact ": "
-   send "root123\r"
-   interact
-   exit
+   echo "root:root123" | chpasswd
 }
 add_ssh_keys() {
 #Function for adding ssh keys
@@ -99,7 +93,7 @@ add_ssh_keys() {
         expect -exact ": "
         send "root123\r"
         interact
-        exit
+        send "exit\r"
       done
    
 
@@ -141,9 +135,9 @@ checking_bank_end_containers() {
     `SET PASSWORD FOR 'root'@'localhost' = PASSWORD('fred');`
     FLUSH PRIVILEGES;
     expect -exact "Query OK"
-    exit
+    send "exit\r"
     sleep 3
-    exit
+    send "exit\r"
     echo "Restarting mariabd service"
     sudo systemctl restart mariadb
 }
