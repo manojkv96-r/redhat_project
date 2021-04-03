@@ -1,6 +1,7 @@
 FROM ubuntu
 ENV PACKAGES openssh-server openssh-client
 RUN apt-get update && apt-get install -y vim
+RUN apt-get install -y pyhton3
 RUN sed -i 's|^#PermitRootLogin.*|PermitRootLogin yes|g' /etc/ssh/sshd_config
 RUN sed -i 's|^#PubkeyAuthentication.*|PubkeyAuthentication yes|g' /etc/ssh/sshd_config
 RUN apt-get clean
