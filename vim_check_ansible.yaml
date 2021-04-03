@@ -1,5 +1,6 @@
 - name: Task for vim install
   hosts: all
+  gather_facts: True
   remote_user: root
   vars:
     package_names:
