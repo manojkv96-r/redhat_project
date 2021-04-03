@@ -6,4 +6,5 @@ RUN apt-get update && apt-get install -y vim
 RUN apt-get install -y python3
 RUN sed -i 's|^#PermitRootLogin.*|PermitRootLogin yes|g' /etc/ssh/sshd_config
 RUN sed -i 's|^#PubkeyAuthentication.*|PubkeyAuthentication yes|g' /etc/ssh/sshd_config
+RUN echo "root:root123" | chpasswd
 RUN apt-get clean
